@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../data/case_data.dart';
 import '../providers/game_provider.dart';
 
 class CaseSelectionView extends StatelessWidget {
@@ -8,10 +7,12 @@ class CaseSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final game = context.watch<GameProvider>();
+
     return Container(
       decoration: const BoxDecoration(
         gradient: RadialGradient(
-          colors: [Color(0xFF0F172A), Color(0xFF020617)],
+          colors: [Color(0xFFF1F5F9), Color(0xFFE2E8F0)], // Soft slate light gradient
           center: Alignment.center,
           radius: 1.5,
         ),
@@ -23,88 +24,104 @@ class CaseSelectionView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Available Cases',
-                style: TextStyle(
+              Text(
+                game.language == 'hindi' 
+                  ? 'नमस्ते, ${game.userName ?? "डिटेक्टिव"}!' 
+                  : 'Welcome, ${game.userName ?? "Detective"}!',
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Color(0xFF1E293B), // Dark slate instead of white
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Select a file to begin your investigation.',
+                game.language == 'hindi'
+                  ? 'अपनी जांच शुरू करने के लिए कोई केस चुनें।'
+                  : 'Select a file to begin your investigation.',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey[400],
+                  color: Colors.grey[700], // Darker grey suitable for light mode
                 ),
               ),
               const SizedBox(height: 32),
               Expanded(
                 child: ListView.builder(
-                  itemCount: allCases.length,
+                  itemCount: game.availableCases.length,
                   itemBuilder: (context, index) {
-                    final caseItem = allCases[index];
-                    return Card(
-                      color: Colors.white.withOpacity(0.05),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(
-                          color: Colors.blueAccent.withOpacity(0.3),
-                          width: 1,
-                        ),
+                    final caseItem = game.availableCases[index];
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blueAccent.withOpacity(0.08),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          )
+                        ],
                       ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: () {
-                          context.read<GameProvider>().startCase(caseItem);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Colors.blueAccent.withOpacity(0.2),
-                                  shape: BoxShape.circle,
+                      child: Card(
+                        color: Colors.white, // Crisp white card
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color: Colors.blueAccent.withOpacity(0.15),
+                            width: 1,
+                          ),
+                        ),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            context.read<GameProvider>().startCase(caseItem);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueAccent.withOpacity(0.1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.security,
+                                    color: Colors.blueAccent,
+                                    size: 32,
+                                  ),
                                 ),
-                                child: const Icon(
-                                  Icons.security,
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        caseItem.title,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF1E293B),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        caseItem.description,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.chevron_right,
                                   color: Colors.blueAccent,
-                                  size: 32,
                                 ),
-                              ),
-                              const SizedBox(width: 20),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      caseItem.title,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      caseItem.description,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[300],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Icon(
-                                Icons.chevron_right,
-                                color: Colors.blueAccent,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

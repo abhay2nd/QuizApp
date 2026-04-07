@@ -8,19 +8,19 @@ final Case kycFraudCase = Case(
     StoryStep(
       narrative: 'You are at home when your phone buzzes. You receive an SMS from a generic 6-digit number.',
       evidence: Evidence(
-        title: 'VK-HDFCBK', // A fake sender ID
+        title: 'VK-UCOBK', // A fake sender ID
         type: 'sms',
-        description: 'Dear Customer, your HDFC Bank account will be blocked today. Please update your PAN card immediately to avoid suspension. Click here: http://hdfc-kyc-update.net/login',
+        description: 'Dear Customer, your UCO Bank account will be blocked today. Please update your PAN card immediately to avoid suspension. Click here: http://uco-kyc-update.net/login',
       ),
       question: QuizQuestion(
         questionText: 'What is the most obvious red flag in this SMS?',
         options: [
           'The bank is warning you before suspending the account.',
-          'The URL points to "hdfc-kyc-update.net" via standard HTTP.',
+          'The URL points to "uco-kyc-update.net" via standard HTTP.',
           'It asks to update the PAN card, which is a rare requirement.',
         ],
         correctOptionIndex: 1,
-        explanation: 'Banks use secure official domains like https://netbanking.hdfcbank.com. Scammers often register fake domains with hyphens or numbers, and lacking HTTPS.',
+        explanation: 'Banks use secure official domains like https://netbanking.bank.in. Scammers often register fake domains with hyphens or numbers, and lacking HTTPS.',
         safetyTip: 'Never click on links from unverified SMS messages. Always type your bank\'s official website URL directly into the browser.',
       ),
     ),
@@ -29,7 +29,7 @@ final Case kycFraudCase = Case(
       evidence: Evidence(
         title: '+91 98765 43210',
         type: 'call_transcript',
-        description: 'Caller: "Hello sir, I am calling from HDFC Bank head office. We noticed you haven\'t completed your KYC via the link we sent. I can help you do it over the phone so your account isn\'t blocked. I have sent a 6-digit verification code to your phone, could you please read it back to me?"',
+        description: 'Caller: "Hello sir, I am calling from UCO Bank head office. We noticed you haven\'t completed your KYC via the link we sent. I can help you do it over the phone so your account isn\'t blocked. I have sent a 6-digit verification code to your phone, could you please read it back to me?"',
       ),
       question: QuizQuestion(
         questionText: 'How should you respond to this caller?',
@@ -67,7 +67,7 @@ final Case kycFraudCase = Case(
       evidence: Evidence(
         title: 'Bank Alert',
         type: 'sms',
-        description: 'Txn of Rs. 50,000.00 debited from A/c XX4592. If not done by you, click http://dispute-hdfc.com to reverse the transaction.',
+        description: 'Txn of Rs. 50,000.00 debited from A/c XX4592. If not done by you, click http://dispute-uco.com to reverse the transaction.',
       ),
       question: QuizQuestion(
         questionText: 'You haven\'t shared your OTP or clicked any previous links. Is the money really gone?',

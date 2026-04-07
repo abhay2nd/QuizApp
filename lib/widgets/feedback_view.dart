@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/game_provider.dart';
+import 'character_guide.dart';
 
 class FeedbackView extends StatelessWidget {
   const FeedbackView({super.key});
@@ -18,90 +19,146 @@ class FeedbackView extends StatelessWidget {
     final title = isCorrect ? 'Good Detective Work!' : 'Critical Mistake!';
 
     return Container(
-      color: color.withOpacity(0.1),
-      padding: const EdgeInsets.all(32.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 80, color: color),
-          const SizedBox(height: 24),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 32),
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'EXPLANATION:',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  step.question.explanation,
-                  style: const TextStyle(fontSize: 18, color: Colors.white),
-                ),
-                const SizedBox(height: 24),
-                const Row(
-                  children: [
-                    Icon(Icons.shield, color: Colors.amberAccent, size: 20),
-                    SizedBox(width: 8),
-                    Text(
-                      'SAFETY TIP',
-                      style: TextStyle(
-                        color: Colors.amberAccent,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                      ),
+      decoration: const BoxDecoration(
+        color: Colors.transparent, // Let background show
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            children: [
+              // Title and Icon
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, size: 40, color: color),
+                  const SizedBox(width: 12),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      color: color,
+                      shadows: [Shadow(color: color.withOpacity(0.5), blurRadius: 10)],
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  step.question.safetyTip,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white70,
-                    fontStyle: FontStyle.italic,
                   ),
-                ),
-              ],
-            ),
-          ),
-          const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: color,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // 2D Character
+                      CharacterGuide(items: [
+                        SpeakItem(text: step.question.explanation)
+                      ]),
+                      const SizedBox(height: 24),
+                      
+                      // 3D Styled Explanation Box
+                      Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: color.withOpacity(0.3), width: 2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: color.withOpacity(0.15),
+                              blurRadius: 15,
+                              offset: const Offset(0, 8),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'EXPLANATION:',
+                              style: TextStyle(
+                                color: color.withOpacity(0.8),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              step.question.explanation,
+                              style: const TextStyle(fontSize: 18, color: Color(0xFF1E293B), height: 1.5),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16.0),
+                              child: Divider(color: Colors.black12, thickness: 1),
+                            ),
+                            Row(
+                              children: [
+                                const Icon(Icons.shield, color: Colors.orangeAccent, size: 24),
+                                const SizedBox(width: 12),
+                                Text(
+                                  'SAFETY TIP',
+                                  style: TextStyle(
+                                    color: Colors.orange.shade700,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              step.question.safetyTip,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey.shade800,
+                                fontStyle: FontStyle.italic,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              onPressed: () {
-                context.read<GameProvider>().nextStep();
-              },
-              child: const Text('CONTINUE INVESTIGATION', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
+
+              // Continue Button
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: color.withOpacity(0.3),
+                          blurRadius: 15,
+                          offset: const Offset(0, 5),
+                        )
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: color,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                      ),
+                      onPressed: () {
+                        context.read<GameProvider>().nextStep();
+                      },
+                      child: const Text('CONTINUE INVESTIGATION', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 1)),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

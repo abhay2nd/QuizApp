@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../models/models.dart';
-import '../data/case_data.dart';
+import '../data/case_data.dart' as english_data;
+import '../data/case_data_hindi.dart' as hindi_data;
 import '../services/tts_service.dart';
 
 enum GameState {
+  welcome,
   caseSelection,
   investigation,
   feedback,
@@ -11,11 +13,16 @@ enum GameState {
 }
 
 class GameProvider extends ChangeNotifier {
-  GameState _state = GameState.caseSelection;
+  GameState _state = GameState.welcome; // Default state is welcome
   Case? _currentCase;
   int _currentStepIndex = 0;
   bool _lastAnswerCorrect = false;
   int _score = 0;
+  
+  // Profile
+  String? userName;
+  String language = 'english';
+  List<Case> availableCases = [];
 
   GameState get state => _state;
   Case? get currentCase => _currentCase;
@@ -37,6 +44,23 @@ class GameProvider extends ChangeNotifier {
     } else {
       TTSService().stop();
     }
+  }
+
+  void initializeProfile(String name, String lang) {
+    userName = name;
+    language = lang;
+    
+    // Switch datasets & configure TTS correctly
+    if (lang == 'hindi') {
+      availableCases = hindi_data.allCases;
+      TTSService().setLanguageConfig('hindi');
+    } else {
+      availableCases = english_data.allCases;
+      TTSService().setLanguageConfig('english');
+    }
+    
+    _state = GameState.caseSelection;
+    notifyListeners();
   }
 
   void startCase(Case c) {

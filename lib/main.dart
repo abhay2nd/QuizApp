@@ -26,15 +26,18 @@ class FraudDetectiveApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF1E3A8A), // Deep blue, trustworthy banking color
-          brightness: Brightness.dark,
+          seedColor: const Color(0xFF6366F1), // Modern vibrant indigo
+          brightness: Brightness.light,
+          surface: Colors.grey[50], // Soft white background
         ),
         textTheme: GoogleFonts.interTextTheme(
-          ThemeData.dark().textTheme,
+          ThemeData.light().textTheme,
         ),
         appBarTheme: const AppBarTheme(
           centerTitle: true,
           elevation: 0,
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black87,
         ),
       ),
       home: const GameScreen(),
