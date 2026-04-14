@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/game_provider.dart';
 import '../../models/models.dart';
 
 class DocumentScreen extends StatelessWidget {
@@ -8,19 +10,21 @@ class DocumentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isHighContrast = context.watch<GameProvider>().isHighContrast;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E), // PDF Viewer background
+        color: isHighContrast ? const Color(0xFF1E1E1E) : Colors.grey.shade200, // PDF Viewer background
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade700, width: 1),
+        border: Border.all(color: isHighContrast ? Colors.grey.shade700 : Colors.grey.shade400, width: 1),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           // Toolbar
           Container(
-            color: const Color(0xFF2C2C2C),
+            color: isHighContrast ? const Color(0xFF2C2C2C) : Colors.grey.shade300,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
@@ -29,11 +33,11 @@ class DocumentScreen extends StatelessWidget {
                 Expanded(
                   child: Text(
                     evidence.title,
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: isHighContrast ? Colors.white : Colors.black87, fontWeight: FontWeight.bold),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const Icon(Icons.file_download, color: Colors.white),
+                Icon(Icons.file_download, color: isHighContrast ? Colors.white : Colors.black87),
               ],
             ),
           ),
@@ -43,7 +47,7 @@ class DocumentScreen extends StatelessWidget {
             margin: const EdgeInsets.all(16),
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: isHighContrast ? Colors.black : Colors.white,
               borderRadius: BorderRadius.circular(4),
               boxShadow: [
                 BoxShadow(
@@ -61,8 +65,8 @@ class DocumentScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 Text(
                   evidence.description,
-                  style: const TextStyle(
-                    color: Colors.black87,
+                  style: TextStyle(
+                    color: isHighContrast ? Colors.white : Colors.black87,
                     fontSize: 16,
                     height: 1.6,
                     fontFamily: 'serif',

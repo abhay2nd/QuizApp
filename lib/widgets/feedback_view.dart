@@ -11,6 +11,7 @@ class FeedbackView extends StatelessWidget {
     final game = context.watch<GameProvider>();
     final isCorrect = game.lastAnswerCorrect;
     final step = game.currentStep;
+    final isHighContrast = game.isHighContrast;
 
     if (step == null) return const SizedBox.shrink();
 
@@ -60,9 +61,9 @@ class FeedbackView extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: isHighContrast ? Colors.grey[900] : Colors.white,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: color.withOpacity(0.3), width: 2),
+                          border: Border.all(color: isHighContrast ? Colors.grey[800]! : color.withOpacity(0.3), width: 2),
                           boxShadow: [
                             BoxShadow(
                               color: color.withOpacity(0.15),
@@ -85,7 +86,11 @@ class FeedbackView extends StatelessWidget {
                             const SizedBox(height: 12),
                             Text(
                               step.question.explanation,
-                              style: const TextStyle(fontSize: 18, color: Color(0xFF1E293B), height: 1.5),
+                              style: TextStyle(
+                                fontSize: 18, 
+                                color: isHighContrast ? Colors.white : const Color(0xFF1E293B), 
+                                height: 1.5
+                              ),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -110,7 +115,7 @@ class FeedbackView extends StatelessWidget {
                               step.question.safetyTip,
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.grey.shade800,
+                                color: isHighContrast ? Colors.grey[400] : Colors.grey.shade800,
                                 fontStyle: FontStyle.italic,
                                 height: 1.5,
                               ),

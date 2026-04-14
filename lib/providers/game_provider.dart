@@ -18,6 +18,7 @@ class GameProvider extends ChangeNotifier {
   int _currentStepIndex = 0;
   bool _lastAnswerCorrect = false;
   int _score = 0;
+  bool _isHighContrast = false;
   
   // Profile
   String? userName;
@@ -37,13 +38,11 @@ class GameProvider extends ChangeNotifier {
     return _currentCase!.steps[_currentStepIndex];
   }
 
-  void _triggerTTS() {
-    final step = currentStep;
-    if (step != null && _state == GameState.investigation) {
-      TTSService().speak("${step.narrative}. ${step.question.questionText}");
-    } else {
-      TTSService().stop();
-    }
+  bool get isHighContrast => _isHighContrast;
+
+  void toggleHighContrast() {
+    _isHighContrast = !_isHighContrast;
+    notifyListeners();
   }
 
   void initializeProfile(String name, String lang) {
@@ -69,7 +68,6 @@ class GameProvider extends ChangeNotifier {
     _score = 0;
     _state = GameState.investigation;
     notifyListeners();
-    _triggerTTS();
   }
 
   void answerQuestion(int selectedIndex) {
@@ -94,7 +92,6 @@ class GameProvider extends ChangeNotifier {
       TTSService().stop();
     } else {
       _state = GameState.investigation;
-      _triggerTTS();
     }
     notifyListeners();
   }

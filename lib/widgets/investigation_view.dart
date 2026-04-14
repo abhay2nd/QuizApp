@@ -46,7 +46,9 @@ class _InvestigationViewState extends State<InvestigationView> {
     if (step.evidence != null) {
       speakItems.add(SpeakItem(text: step.evidence!.description, targetKey: _evidenceKey));
     }
-    speakItems.add(SpeakItem(text: step.question.questionText, targetKey: _questionKey));
+    speakItems.add(SpeakItem(text: "Q. ${step.question.questionText}", targetKey: _questionKey));
+    
+    final isHighContrast = context.watch<GameProvider>().isHighContrast;
 
     return Container(
       color: Colors.transparent, // Let game screen gradient show through
@@ -61,7 +63,7 @@ class _InvestigationViewState extends State<InvestigationView> {
                 // Detective narrative
                 Container(
                   key: _narrativeKey,
-                  child: _buildChatBubble(step.narrative, isSetup: true),
+                  child: _buildChatBubble(step.narrative, isSetup: true, isHighContrast: isHighContrast),
                 ),
                 const SizedBox(height: 24),
                 
@@ -85,11 +87,17 @@ class _InvestigationViewState extends State<InvestigationView> {
                         key: _questionKey,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF6366F1), Color(0xFF4F46E5)], // Vibrant modern indigo
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+                      gradient: isHighContrast 
+                        ? const LinearGradient(
+                            colors: [Color(0xFFB45309), Color(0xFF78350F)], // Dark Amber gradient
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )
+                        : const LinearGradient(
+                            colors: [Color(0xFFF59E0B), Color(0xFFD97706)], // Light Amber gradient
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
@@ -105,7 +113,7 @@ class _InvestigationViewState extends State<InvestigationView> {
                       ],
                     ),
                     child: Text(
-                      step.question.questionText,
+                      'Q. ${step.question.questionText}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -118,6 +126,16 @@ class _InvestigationViewState extends State<InvestigationView> {
               ],
             ),
             const SizedBox(height: 32),
+            
+            Text(
+              'Choose the correct option.',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: isHighContrast ? Colors.grey[300] : Colors.blueGrey[700],
+              ),
+            ),
+            const SizedBox(height: 16),
             
             // Options
             ...List.generate(step.question.options.length, (index) {
@@ -135,9 +153,9 @@ class _InvestigationViewState extends State<InvestigationView> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF1E293B),
-                      side: BorderSide(color: Colors.blueAccent.withOpacity(0.2), width: 1.5),
+                      backgroundColor: isHighContrast ? Colors.grey[900] : Colors.white,
+                      foregroundColor: isHighContrast ? Colors.white : const Color(0xFF1E293B),
+                      side: BorderSide(color: isHighContrast ? Colors.grey[700]! : Colors.blueAccent.withOpacity(0.2), width: 1.5),
                       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -148,9 +166,20 @@ class _InvestigationViewState extends State<InvestigationView> {
                     onPressed: () {
                       context.read<GameProvider>().answerQuestion(index);
                     },
-                    child: Text(
-                      step.question.options[index],
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.radio_button_unchecked, 
+                          color: isHighContrast ? Colors.grey[400] : Colors.blueAccent,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            '${step.question.options[index]}',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -162,9 +191,7 @@ class _InvestigationViewState extends State<InvestigationView> {
       Positioned(
         bottom: 0,
         left: -20, // Give her a slight offset in the bottom left
-        child: IgnorePointer(
-          child: CharacterGuide(items: speakItems),
-        ),
+        child: CharacterGuide(items: speakItems),
       ),
     ]));
   }
@@ -184,10 +211,12 @@ class _InvestigationViewState extends State<InvestigationView> {
     }
   }
 
-  Widget _buildChatBubble(String text, {required bool isSetup}) {
+  Widget _buildChatBubble(String text, {required bool isSetup, required bool isHighContrast}) {
     return Container(
       decoration: BoxDecoration(
-        color: isSetup ? Colors.blue.shade50 : Colors.white,
+        color: isHighContrast 
+            ? (isSetup ? Colors.blueGrey.shade900 : Colors.grey.shade900)
+            : (isSetup ? Colors.blue.shade50 : Colors.white),
         borderRadius: BorderRadius.only(
           topLeft: const Radius.circular(16),
           topRight: const Radius.circular(16),
@@ -208,7 +237,11 @@ class _InvestigationViewState extends State<InvestigationView> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Text(
         text,
-        style: TextStyle(fontSize: 18, color: Colors.blueGrey.shade900, height: 1.4),
+        style: TextStyle(
+          fontSize: 18, 
+          color: isHighContrast ? Colors.white : Colors.blueGrey.shade900, 
+          height: 1.4,
+        ),
       ),
     );
   }

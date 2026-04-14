@@ -8,10 +8,12 @@ class CaseSelectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final game = context.watch<GameProvider>();
+    final isHighContrast = game.isHighContrast;
 
     return Container(
-      decoration: const BoxDecoration(
-        gradient: RadialGradient(
+      decoration: BoxDecoration(
+        color: isHighContrast ? Colors.transparent : null,
+        gradient: isHighContrast ? null : const RadialGradient(
           colors: [Color(0xFFF1F5F9), Color(0xFFE2E8F0)], // Soft slate light gradient
           center: Alignment.center,
           radius: 1.5,
@@ -28,10 +30,10 @@ class CaseSelectionView extends StatelessWidget {
                 game.language == 'hindi' 
                   ? 'नमस्ते, ${game.userName ?? "डिटेक्टिव"}!' 
                   : 'Welcome, ${game.userName ?? "Detective"}!',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E293B), // Dark slate instead of white
+                  color: isHighContrast ? Colors.white : const Color(0xFF1E293B), // Dark slate instead of white
                 ),
               ),
               const SizedBox(height: 8),
@@ -41,7 +43,7 @@ class CaseSelectionView extends StatelessWidget {
                   : 'Select a file to begin your investigation.',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey[700], // Darker grey suitable for light mode
+                  color: isHighContrast ? Colors.grey[300] : Colors.grey[700], // Darker grey suitable for light mode
                 ),
               ),
               const SizedBox(height: 32),
@@ -62,12 +64,12 @@ class CaseSelectionView extends StatelessWidget {
                         ],
                       ),
                       child: Card(
-                        color: Colors.white, // Crisp white card
+                        color: isHighContrast ? Colors.grey[900] : Colors.white, // Crisp white card
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                           side: BorderSide(
-                            color: Colors.blueAccent.withOpacity(0.15),
+                            color: isHighContrast ? Colors.grey[700]! : Colors.blueAccent.withOpacity(0.15),
                             width: 1,
                           ),
                         ),
@@ -99,10 +101,10 @@ class CaseSelectionView extends StatelessWidget {
                                     children: [
                                       Text(
                                         caseItem.title,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xFF1E293B),
+                                          color: isHighContrast ? Colors.white : const Color(0xFF1E293B),
                                         ),
                                       ),
                                       const SizedBox(height: 8),
@@ -110,7 +112,7 @@ class CaseSelectionView extends StatelessWidget {
                                         caseItem.description,
                                         style: TextStyle(
                                           fontSize: 14,
-                                          color: Colors.grey[600],
+                                          color: isHighContrast ? Colors.grey[400] : Colors.grey[600],
                                         ),
                                       ),
                                     ],

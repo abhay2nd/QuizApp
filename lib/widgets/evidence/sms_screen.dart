@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/game_provider.dart';
 import '../../models/models.dart';
 
 class SmsScreen extends StatelessWidget {
@@ -8,12 +10,14 @@ class SmsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isHighContrast = context.watch<GameProvider>().isHighContrast;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF121212), // Dark mode background
+        color: isHighContrast ? const Color(0xFF121212) : Colors.white, // Dark mode background or white
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade800, width: 2),
+        border: Border.all(color: isHighContrast ? Colors.grey.shade800 : Colors.grey.shade300, width: 2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.5),
@@ -28,11 +32,11 @@ class SmsScreen extends StatelessWidget {
         children: [
           // Simulated App Bar
           Container(
-            color: const Color(0xFF1E1E1E),
+            color: isHighContrast ? const Color(0xFF1E1E1E) : Colors.grey.shade100,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
-                const Icon(Icons.arrow_back, color: Colors.white),
+                Icon(Icons.arrow_back, color: isHighContrast ? Colors.white : Colors.black87),
                 const SizedBox(width: 12),
                 CircleAvatar(
                   backgroundColor: Colors.blueAccent.withOpacity(0.2),
@@ -45,8 +49,8 @@ class SmsScreen extends StatelessWidget {
                     children: [
                       Text(
                         evidence.title,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: isHighContrast ? Colors.white : Colors.black87,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -55,16 +59,16 @@ class SmsScreen extends StatelessWidget {
                       Text(
                         'via SMS',
                         style: TextStyle(
-                          color: Colors.grey.shade400,
+                          color: isHighContrast ? Colors.grey.shade400 : Colors.grey.shade600,
                           fontSize: 12,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Icon(Icons.call, color: Colors.white),
+                Icon(Icons.call, color: isHighContrast ? Colors.white : Colors.black87),
                 const SizedBox(width: 16),
-                const Icon(Icons.more_vert, color: Colors.white),
+                Icon(Icons.more_vert, color: isHighContrast ? Colors.white : Colors.black87),
               ],
             ),
           ),
@@ -72,7 +76,7 @@ class SmsScreen extends StatelessWidget {
           // Chat Body
           Container(
             padding: const EdgeInsets.all(16),
-            color: const Color(0xFF121212),
+            color: isHighContrast ? const Color(0xFF121212) : Colors.white,
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,9 +101,9 @@ class SmsScreen extends StatelessWidget {
                     Flexible(
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF2C2C2C),
-                          borderRadius: BorderRadius.only(
+                        decoration: BoxDecoration(
+                          color: isHighContrast ? const Color(0xFF2C2C2C) : Colors.grey.shade200,
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(16),
                             topRight: Radius.circular(16),
                             bottomRight: Radius.circular(16),
@@ -108,8 +112,8 @@ class SmsScreen extends StatelessWidget {
                         ),
                         child: Text(
                           evidence.description,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: isHighContrast ? Colors.white : Colors.black87,
                             fontSize: 15,
                             height: 1.4,
                           ),
@@ -126,7 +130,7 @@ class SmsScreen extends StatelessWidget {
           // Reply Box
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            color: const Color(0xFF1E1E1E),
+            color: isHighContrast ? const Color(0xFF1E1E1E) : Colors.grey.shade100,
             child: Row(
               children: [
                 const Icon(Icons.add_circle_outline, color: Colors.grey),
@@ -137,8 +141,9 @@ class SmsScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2C2C2C),
+                      color: isHighContrast ? const Color(0xFF2C2C2C) : Colors.white,
                       borderRadius: BorderRadius.circular(20),
+                      border: isHighContrast ? null : Border.all(color: Colors.grey.shade300),
                     ),
                     child: const Text('Text message', style: TextStyle(color: Colors.grey)),
                   ),

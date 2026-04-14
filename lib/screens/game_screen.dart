@@ -12,16 +12,19 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gameProvider = context.watch<GameProvider>();
+    final isHighContrast = gameProvider.isHighContrast;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'FRAUD DETECTIVE',
           style: TextStyle(
             letterSpacing: 3, 
             fontWeight: FontWeight.w900,
-            color: Color(0xFF1E3A8A), // Dark blue text
-            shadows: [Shadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))],
+            color: isHighContrast ? Colors.white : const Color(0xFF1E3A8A), // White text in high contrast
+            shadows: const [Shadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))],
           ),
         ),
         centerTitle: true,
@@ -30,19 +33,31 @@ class GameScreen extends StatelessWidget {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                Colors.white.withOpacity(0.9), 
-                Colors.white.withOpacity(0.4)
-              ],
+              colors: isHighContrast 
+                ? [Colors.black.withOpacity(0.9), Colors.black.withOpacity(0.4)]
+                : [Colors.white.withOpacity(0.9), Colors.white.withOpacity(0.4)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              isHighContrast ? Icons.brightness_high : Icons.contrast,
+              color: isHighContrast ? Colors.white : const Color(0xFF1E3A8A),
+            ),
+            tooltip: 'Toggle High Contrast Mode',
+            onPressed: () {
+              gameProvider.toggleHighContrast();
+            },
+          ),
+        ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
+        decoration: BoxDecoration(
+          color: isHighContrast ? Colors.black : null,
+          gradient: isHighContrast ? null : const LinearGradient(
             colors: [Color(0xFFF8FAFC), Color(0xFFF1F5F9), Color(0xFFE2E8F0)], // Soft modern slates/white
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

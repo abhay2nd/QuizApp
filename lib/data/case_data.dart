@@ -3,7 +3,7 @@ import '../models/models.dart';
 final Case kycFraudCase = Case(
   id: 'case_001',
   title: 'The Urgent KYC Update',
-  description: 'Investigate a suspicious sequence of messages and calls claiming to be from a major bank regarding a KYC suspension.',
+  description: 'Investigate a suspicious',
   steps: [
     StoryStep(
       narrative: 'You are at home when your phone buzzes. You receive an SMS from a generic 6-digit number.',
@@ -16,7 +16,7 @@ final Case kycFraudCase = Case(
         questionText: 'What is the most obvious red flag in this SMS?',
         options: [
           'The bank is warning you before suspending the account.',
-          'The URL points to "uco-kyc-update.net" via standard HTTP.',
+          'The URL points to "uco-kyc-update.net".',
           'It asks to update the PAN card, which is a rare requirement.',
         ],
         correctOptionIndex: 1,

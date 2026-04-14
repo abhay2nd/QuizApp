@@ -36,80 +36,89 @@ class _WelcomeViewState extends State<WelcomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final isHighContrast = context.watch<GameProvider>().isHighContrast;
+
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Container(
           padding: const EdgeInsets.all(32.0),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isHighContrast ? Colors.grey[900] : Colors.white,
             borderRadius: BorderRadius.circular(24.0),
             boxShadow: [
               BoxShadow(
-                color: Colors.blueAccent.withOpacity(0.1),
+                color: isHighContrast ? Colors.black.withOpacity(0.5) : Colors.blueAccent.withOpacity(0.1),
                 blurRadius: 20,
                 spreadRadius: 5,
                 offset: const Offset(0, 5),
               ),
             ],
+            border: isHighContrast ? Border.all(color: Colors.grey[800]!) : null,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // Header
-              const Icon(Icons.shield, size: 64, color: Color(0xFF6366F1)),
+              Icon(Icons.shield, size: 64, color: isHighContrast ? Colors.white : const Color(0xFF6366F1)),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Welcome Detective',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w900,
-                  color: Color(0xFF1E293B),
+                  color: isHighContrast ? Colors.white : const Color(0xFF1E293B),
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Please set up your profile to begin your investigation.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black54, fontSize: 16),
+                style: TextStyle(color: isHighContrast ? Colors.grey[400] : Colors.black54, fontSize: 16),
               ),
               const SizedBox(height: 32),
 
               // Name Input
               TextField(
                 controller: _nameController,
+                style: TextStyle(color: isHighContrast ? Colors.white : Colors.black),
                 decoration: InputDecoration(
                   labelText: 'Your Name',
-                  prefixIcon: const Icon(Icons.person, color: Color(0xFF6366F1)),
+                  labelStyle: TextStyle(color: isHighContrast ? Colors.grey[400] : Colors.grey[600]),
+                  prefixIcon: Icon(Icons.person, color: isHighContrast ? Colors.white : const Color(0xFF6366F1)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16.0),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
+                    borderSide: BorderSide(color: isHighContrast ? Colors.grey[700]! : Colors.grey.shade300),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                    borderSide: BorderSide(color: isHighContrast ? Colors.grey[700]! : Colors.grey.shade300),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16.0),
-                    borderSide: const BorderSide(color: Color(0xFF6366F1), width: 2),
+                    borderSide: BorderSide(color: isHighContrast ? Colors.white : const Color(0xFF6366F1), width: 2),
                   ),
                 ),
               ),
               const SizedBox(height: 24),
 
               // Language Selection
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Select Language',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: isHighContrast ? Colors.white : Colors.black87),
                 ),
               ),
               const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
-                    child: _buildLangButton('English', 'english', _selectedLanguage == 'english'),
+                    child: _buildLangButton('English', 'english', _selectedLanguage == 'english', isHighContrast),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: _buildLangButton('हिन्दी (Hindi)', 'hindi', _selectedLanguage == 'hindi'),
+                    child: _buildLangButton('हिन्दी (Hindi)', 'hindi', _selectedLanguage == 'hindi', isHighContrast),
                   ),
                 ],
               ),
@@ -121,8 +130,8 @@ class _WelcomeViewState extends State<WelcomeView> {
                 height: 56,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6366F1),
-                    foregroundColor: Colors.white,
+                    backgroundColor: isHighContrast ? Colors.white : const Color(0xFF6366F1),
+                    foregroundColor: isHighContrast ? Colors.black : Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.0),
                     ),
@@ -139,7 +148,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     );
   }
 
-  Widget _buildLangButton(String label, String value, bool isSelected) {
+  Widget _buildLangButton(String label, String value, bool isSelected, bool isHighContrast) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -150,9 +159,13 @@ class _WelcomeViewState extends State<WelcomeView> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF6366F1).withOpacity(0.1) : Colors.transparent,
+          color: isSelected 
+            ? (isHighContrast ? Colors.white.withOpacity(0.2) : const Color(0xFF6366F1).withOpacity(0.1)) 
+            : Colors.transparent,
           border: Border.all(
-            color: isSelected ? const Color(0xFF6366F1) : Colors.grey.shade300,
+            color: isSelected 
+              ? (isHighContrast ? Colors.white : const Color(0xFF6366F1)) 
+              : (isHighContrast ? Colors.grey.shade700 : Colors.grey.shade300),
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -161,7 +174,9 @@ class _WelcomeViewState extends State<WelcomeView> {
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? const Color(0xFF6366F1) : Colors.black54,
+            color: isSelected 
+              ? (isHighContrast ? Colors.white : const Color(0xFF6366F1)) 
+              : (isHighContrast ? Colors.grey[400] : Colors.black54),
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             fontSize: 16,
           ),

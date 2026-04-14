@@ -20,24 +20,28 @@ class FraudDetectiveApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gameProvider = context.watch<GameProvider>();
+    
     return MaterialApp(
       title: 'Fraud Detective',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6366F1), // Modern vibrant indigo
-          brightness: Brightness.light,
-          surface: Colors.grey[50], // Soft white background
-        ),
+        colorScheme: gameProvider.isHighContrast 
+          ? const ColorScheme.highContrastDark() 
+          : ColorScheme.fromSeed(
+              seedColor: const Color(0xFF6366F1), // Modern vibrant indigo
+              brightness: Brightness.light,
+              surface: Colors.grey[50], // Soft white background
+            ),
         textTheme: GoogleFonts.interTextTheme(
-          ThemeData.light().textTheme,
+          gameProvider.isHighContrast ? ThemeData.dark().textTheme : ThemeData.light().textTheme,
         ),
-        appBarTheme: const AppBarTheme(
+        appBarTheme: AppBarTheme(
           centerTitle: true,
           elevation: 0,
           backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black87,
+          foregroundColor: gameProvider.isHighContrast ? Colors.white : Colors.black87,
         ),
       ),
       home: const GameScreen(),
