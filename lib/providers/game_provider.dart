@@ -10,6 +10,7 @@ enum GameState {
   investigation,
   feedback,
   caseComplete,
+  dartChallenge,
 }
 
 class GameProvider extends ChangeNotifier {
@@ -67,6 +68,12 @@ class GameProvider extends ChangeNotifier {
     _currentStepIndex = 0;
     _score = 0;
     _state = GameState.investigation;
+    notifyListeners();
+  }
+
+  void startDartGame() {
+    TTSService().stop();
+    _state = GameState.dartChallenge;
     notifyListeners();
   }
 

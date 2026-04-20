@@ -142,14 +142,13 @@ class _CharacterGuideState extends State<CharacterGuide> with SingleTickerProvid
           Positioned(
             bottom: 20,
             left: 40,
-            child: FloatingActionButton.extended(
+            child: FloatingActionButton(
               onPressed: () {
                 _startSpeakingSequence();
               },
-              icon: const Icon(Icons.record_voice_over),
-              label: const Text('Assistant'),
               backgroundColor: const Color(0xFF6366F1),
               foregroundColor: Colors.white,
+              child: const Icon(Icons.record_voice_over),
             ),
           ),
         if (_isExpanded)

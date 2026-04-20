@@ -6,6 +6,7 @@ import '../widgets/investigation_view.dart';
 import '../widgets/feedback_view.dart';
 import '../widgets/case_complete_view.dart';
 import '../widgets/welcome_view.dart';
+import '../widgets/dart_game_view.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key});
@@ -14,12 +15,13 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final gameProvider = context.watch<GameProvider>();
     final isHighContrast = gameProvider.isHighContrast;
+    final isDartChallenge = gameProvider.state == GameState.dartChallenge;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'FRAUD DETECTIVE',
+          isDartChallenge ? 'FINANCE TARGET' : 'FRAUD DETECTIVE',
           style: TextStyle(
             letterSpacing: 3, 
             fontWeight: FontWeight.w900,
@@ -82,6 +84,9 @@ class GameScreen extends StatelessWidget {
                 break;
               case GameState.caseComplete:
                 currentView = const CaseCompleteView(key: ValueKey('complete'));
+                break;
+              case GameState.dartChallenge:
+                currentView = const DartGameView(key: ValueKey('dart'));
                 break;
             }
 

@@ -46,7 +46,84 @@ class CaseSelectionView extends StatelessWidget {
                   color: isHighContrast ? Colors.grey[300] : Colors.grey[700], // Darker grey suitable for light mode
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
+              Container(
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.indigoAccent.withOpacity(0.08),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    )
+                  ],
+                ),
+                child: Card(
+                  color: isHighContrast ? Colors.grey[900] : Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(
+                      color: isHighContrast ? Colors.grey[700]! : Colors.indigoAccent.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {
+                      context.read<GameProvider>().startDartGame();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.indigoAccent.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.sports_score,
+                              color: Colors.indigoAccent,
+                              size: 32,
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  game.language == 'hindi' ? 'डार्ट फाइनेंस चैलेंज' : 'Dart Finance Challenge',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: isHighContrast ? Colors.white : const Color(0xFF1E293B),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  game.language == 'hindi' ? 'मिनी-गेम खेलें और अपनी वित्तीय साक्षरता का परीक्षण करें।' : 'Play a mini-game to test your financial literacy.',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: isHighContrast ? Colors.grey[400] : Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: Colors.indigoAccent,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
               Expanded(
                 child: ListView.builder(
                   itemCount: game.availableCases.length,
